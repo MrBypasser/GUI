@@ -1,0 +1,261 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "KUI"
+gui.Parent = player.PlayerGui
+
+-- Main Frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 450, 0, 300)
+frame.Position = UDim2.new(0.5, -225, 1, 0)  -- Start off-screen for sliding in
+frame.BackgroundColor3 = Color3.fromRGB(44, 62, 80)
+frame.BorderSizePixel = 0
+frame.Visible = false
+frame.Parent = gui
+
+-- Rounded corners for the frame
+local frameCorner = Instance.new("UICorner")
+frameCorner.CornerRadius = UDim.new(0, 15)
+frameCorner.Parent = frame
+
+-- Top Bar with Tabs
+local topBar = Instance.new("Frame")
+topBar.Size = UDim2.new(1, 0, 0, 50)
+topBar.Position = UDim2.new(0, 0, 0, 0)
+topBar.BackgroundColor3 = Color3.fromRGB(52, 152, 219)
+topBar.BorderSizePixel = 0
+topBar.Parent = frame
+
+local topBarCorner = Instance.new("UICorner")
+topBarCorner.CornerRadius = UDim.new(0, 15)
+topBarCorner.Parent = topBar
+
+-- Tabs Container
+local tabContainer = Instance.new("Frame")
+tabContainer.Size = UDim2.new(1, -20, 0, 50)
+tabContainer.Position = UDim2.new(0, 10, 0, 0)
+tabContainer.BackgroundTransparency = 1
+tabContainer.Parent = frame
+
+local tabButtons = {}
+local tabContents = {}
+
+-- Function to Create Tabs
+local function createTab(name, index, tabColor)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, 90, 0, 30)
+    button.Position = UDim2.new(0, (index - 1) * 100, 0.5, -15)
+    button.BackgroundColor3 = tabColor
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Text = name
+    button.Font = Enum.Font.SourceSansBold
+    button.TextScaled = true
+    button.BorderSizePixel = 0
+    button.Parent = tabContainer
+
+    local buttonCorner = Instance.new("UICorner")
+    buttonCorner.CornerRadius = UDim.new(0, 10)
+    buttonCorner.Parent = button
+
+    button.MouseButton1Click:Connect(function()
+        for i, content in ipairs(tabContents) do
+            content.Visible = i == index
+        end
+    end)
+
+    -- Add hover effect for better UI interaction
+    button.MouseEnter:Connect(function()
+        button.BackgroundColor3 = tabColor:lerp(Color3.fromRGB(41, 128, 185), 0.2)
+    end)
+
+    button.MouseLeave:Connect(function()
+        button.BackgroundColor3 = tabColor
+    end)
+
+    table.insert(tabButtons, button)
+end
+
+-- Function to Create Tab Content
+local function createTabContent(index, contentColor)
+    local content = Instance.new("Frame")
+    content.Size = UDim2.new(1, -20, 1, -80)
+    content.Position = UDim2.new(0, 10, 0, 60)
+    content.BackgroundColor3 = contentColor
+    content.Visible = index == 1  -- Only show the first tab initially
+    content.BorderSizePixel = 0
+    content.Parent = frame
+
+    local contentCorner = Instance.new("UICorner")
+    contentCorner.CornerRadius = UDim.new(0, 10)
+    contentCorner.Parent = content
+
+    table.insert(tabContents, content)
+end
+
+-- Create Tabs
+createTab("Home", 1, Color3.fromRGB(52, 152, 219))  -- Blue Tab for Home
+createTab("Character", 2, Color3.fromRGB(46, 204, 113))  -- Green Tab for Character
+createTab("Executor", 3, Color3.fromRGB(241, 196, 15))  -- Yellow Tab for Executor
+createTab("Admin", 4, Color3.fromRGB(231, 76, 60))  -- Red Tab for Admin
+
+-- Create Tab Contents
+createTabContent(1, Color3.fromRGB(52, 152, 219))  -- Blue Content for Home
+createTabContent(2, Color3.fromRGB(46, 204, 113))  -- Green Content for Character
+createTabContent(3, Color3.fromRGB(241, 196, 15))  -- Yellow Content for Executor
+createTabContent(4, Color3.fromRGB(231, 76, 60))  -- Red Content for Admin
+
+-- Home Page Content
+local homeContent = tabContents[1]
+local homeLabel = Instance.new("TextLabel")
+homeLabel.Size = UDim2.new(0.8, 0, 0.4, 0)
+homeLabel.Position = UDim2.new(0.1, 0, 0.3, 0)
+homeLabel.BackgroundTransparency = 1
+homeLabel.Text = "Made by Frogie. Have fun!"
+homeLabel.TextColor3 = Color3.new(1, 1, 1)
+homeLabel.TextScaled = true
+homeLabel.Font = Enum.Font.SourceSansBold
+homeLabel.Parent = homeContent
+
+-- Admin Tab Content (with Infinite Yield and Nameless Admin buttons)
+local adminContent = tabContents[4]
+
+-- Infinite Yield Button
+local infiniteYieldButton = Instance.new("TextButton")
+infiniteYieldButton.Size = UDim2.new(0, 350, 0, 40)
+infiniteYieldButton.Position = UDim2.new(0.5, -175, 0.3, 0)
+infiniteYieldButton.Text = "Infinite Yield"
+infiniteYieldButton.TextColor3 = Color3.new(1, 1, 1)
+infiniteYieldButton.Font = Enum.Font.SourceSansBold
+infiniteYieldButton.BackgroundColor3 = Color3.fromRGB(52, 152, 219)
+infiniteYieldButton.TextScaled = true
+infiniteYieldButton.BorderSizePixel = 0
+infiniteYieldButton.Parent = adminContent
+
+-- Nameless Admin Button
+local namelessAdminButton = Instance.new("TextButton")
+namelessAdminButton.Size = UDim2.new(0, 350, 0, 40)
+namelessAdminButton.Position = UDim2.new(0.5, -175, 0.5, 0)
+namelessAdminButton.Text = "Nameless Admin"
+namelessAdminButton.TextColor3 = Color3.new(1, 1, 1)
+namelessAdminButton.Font = Enum.Font.SourceSansBold
+namelessAdminButton.BackgroundColor3 = Color3.fromRGB(52, 152, 219)
+namelessAdminButton.TextScaled = true
+namelessAdminButton.BorderSizePixel = 0
+namelessAdminButton.Parent = adminContent
+
+-- Function to execute Infinite Yield script
+infiniteYieldButton.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source', true))()
+end)
+
+-- Function to execute Nameless Admin script
+namelessAdminButton.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/Source'))()
+end)
+
+-- Character Tab Content (WalkSpeed and JumpPower)
+local characterContent = tabContents[2]
+
+-- WalkSpeed Input
+local walkSpeedPrompt = Instance.new("TextBox")
+walkSpeedPrompt.Size = UDim2.new(0, 200, 0, 40)
+walkSpeedPrompt.Position = UDim2.new(0.5, -100, 0.3, 0)
+walkSpeedPrompt.PlaceholderText = "WalkSpeed (Default: 16)"
+walkSpeedPrompt.Text = ""
+walkSpeedPrompt.TextScaled = true
+walkSpeedPrompt.Font = Enum.Font.SourceSans
+walkSpeedPrompt.BackgroundColor3 = Color3.fromRGB(41, 128, 185)
+walkSpeedPrompt.TextColor3 = Color3.new(1, 1, 1)
+walkSpeedPrompt.BorderSizePixel = 0
+walkSpeedPrompt.Parent = characterContent
+
+-- JumpPower Input
+local jumpPowerPrompt = Instance.new("TextBox")
+jumpPowerPrompt.Size = UDim2.new(0, 200, 0, 40)
+jumpPowerPrompt.Position = UDim2.new(0.5, -100, 0.5, 0)
+jumpPowerPrompt.PlaceholderText = "JumpPower (Default: 50)"
+jumpPowerPrompt.Text = ""
+jumpPowerPrompt.TextScaled = true
+jumpPowerPrompt.Font = Enum.Font.SourceSans
+jumpPowerPrompt.BackgroundColor3 = Color3.fromRGB(41, 128, 185)
+jumpPowerPrompt.TextColor3 = Color3.new(1, 1, 1)
+jumpPowerPrompt.BorderSizePixel = 0
+jumpPowerPrompt.Parent = characterContent
+
+-- Executor Tab Content
+local executorContent = tabContents[3]
+
+-- Executor Input
+local executorPrompt = Instance.new("TextBox")
+executorPrompt.Size = UDim2.new(0, 350, 0, 40)
+executorPrompt.Position = UDim2.new(0.5, -175, 0.3, 0)
+executorPrompt.PlaceholderText = "Enter Executor Command"
+executorPrompt.Text = ""
+executorPrompt.TextScaled = true
+executorPrompt.Font = Enum.Font.SourceSans
+executorPrompt.BackgroundColor3 = Color3.fromRGB(41, 128, 185)
+executorPrompt.TextColor3 = Color3.new(1, 1, 1)
+executorPrompt.BorderSizePixel = 0
+executorPrompt.Parent = executorContent
+
+-- Execute Button
+local executeButton = Instance.new("TextButton")
+executeButton.Size = UDim2.new(0, 350, 0, 40)
+executeButton.Position = UDim2.new(0.5, -175, 0.5, 0)
+executeButton.Text = "Execute"
+executeButton.TextColor3 = Color3.new(1, 1, 1)
+executeButton.Font = Enum.Font.SourceSansBold
+executeButton.BackgroundColor3 = Color3.fromRGB(52, 152, 219)
+executeButton.TextScaled = true
+executeButton.BorderSizePixel = 0
+executeButton.Parent = executorContent
+
+-- Function to execute the script entered by the user
+executeButton.MouseButton1Click:Connect(function()
+    local command = executorPrompt.Text
+    if command and command ~= "" then
+        local success, result = pcall(function()
+            loadstring(command)()
+        end)
+        if not success then
+            print("Error executing command: " .. result)
+        end
+    end
+end)
+
+-- Notification Label
+local notification = Instance.new("TextLabel")
+notification.Size = UDim2.new(0, 300, 0, 50)
+notification.Position = UDim2.new(0.5, -150, 0.2, 0)
+notification.BackgroundColor3 = Color3.fromRGB(41, 128, 185)
+notification.TextColor3 = Color3.new(1, 1, 1)
+notification.TextScaled = true
+notification.Font = Enum.Font.SourceSansBold
+notification.Text = "Made by Frogie. Have fun!"
+notification.Parent = gui
+
+local notificationCorner = Instance.new("UICorner")
+notificationCorner.CornerRadius = UDim.new(0, 15)
+notificationCorner.Parent = notification
+
+-- Hide notification after 3 seconds
+task.delay(3, function()
+    notification:Destroy()
+end)
+
+-- Slide-In Animation and Toggle
+local isOpen = false
+game:GetService("UserInputService").InputBegan:Connect(function(input, isProcessed)
+    if not isProcessed and (input.KeyCode == Enum.KeyCode.K or input.KeyCode == Enum.KeyCode.LowerK) then
+        isOpen = not isOpen
+        if isOpen then
+            frame.Visible = true
+            frame:TweenPosition(UDim2.new(0.5, -225, 0.5, -150), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.5, true)
+        else
+            frame:TweenPosition(UDim2.new(0.5, -225, 1, 0), Enum.EasingDirection.In, Enum.EasingStyle.Quad, 0.5, true, function()
+                frame.Visible = false
+            end)
+        end
+    end
+end)
