@@ -183,6 +183,27 @@ jumpPowerPrompt.TextColor3 = Color3.new(1, 1, 1)
 jumpPowerPrompt.BorderSizePixel = 0
 jumpPowerPrompt.Parent = characterContent
 
+-- WalkSpeed and JumpPower Input Handling
+walkSpeedPrompt.FocusLost:Connect(function()
+    local newWalkSpeed = tonumber(walkSpeedPrompt.Text)
+    if newWalkSpeed then
+        local humanoid = character:FindFirstChild("Humanoid")
+        if humanoid then
+            humanoid.WalkSpeed = newWalkSpeed
+        end
+    end
+end)
+
+jumpPowerPrompt.FocusLost:Connect(function()
+    local newJumpPower = tonumber(jumpPowerPrompt.Text)
+    if newJumpPower then
+        local humanoid = character:FindFirstChild("Humanoid")
+        if humanoid then
+            humanoid.JumpPower = newJumpPower
+        end
+    end
+end)
+
 -- Executor Tab Content
 local executorContent = tabContents[3]
 
@@ -247,7 +268,7 @@ end)
 -- Slide-In Animation and Toggle
 local isOpen = false
 game:GetService("UserInputService").InputBegan:Connect(function(input, isProcessed)
-    if not isProcessed and (input.KeyCode == Enum.KeyCode.K or input.KeyCode == Enum.KeyCode.LowerK) then
+    if not isProcessed and (input.KeyCode == Enum.KeyCode.K or input.KeyCode == Enum.KeyCode.UppercaseK) then
         isOpen = not isOpen
         if isOpen then
             frame.Visible = true
